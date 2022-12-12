@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Weather API</title>
+</head>
+<body>
+    <section class="section-getData">
+        <div class="container">
+            <h1 class="title">Weather API</h1>
+            <form id="weather-form">
+                <input class="location-cls" type="text" placeholder="Location" id="location" name="location" required/>
+                <input class="access-token-cls" type="text" placeholder="Access Token" id="access-key" name="access-key" required/>
+                <button class="submit-btn" type="submit">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="section-fetchData">
+      <div id="api-response"></div>
+    </section>
+    <!-- HTML form for entering the access key and location -->
+<!-- <form id="weather-form">
+    <label for="access-key">Access Key:</label><br>
+    <input type="text" id="access-key" name="access-key"><br>
+    <label for="location">Location:</label><br>
+    <input type="text" id="location" name="location"><br><br>
+    <button type="submit">Submit</button>
+  </form>
+  
+
+  <div id="api-response"></div> -->
+  
+ 
+  <script>
+    
+    const form = document.getElementById('weather-form');
+  
+    console.log(form);
+    form.addEventListener('submit', (event) => {
+      
+      event.preventDefault();
+  
+      
+      const accessKey = document.getElementById('access-key').value;
+      console.log(accessKey);
+      const location = document.getElementById('location').value;
+      console.log(location);
+      
+      fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${accessKey}&contentType=json`)
+        .then((response) => response.json()) 
+        .then((data) => {
+          console.log(data)
+          if (data) {
+           
+            const apiResponse = `
+              <h2>Weather in ${data.address}</h2>
+              <p>Temperature: ${data.currentConditions.temp}</p>
+              <p>Precipitation: ${data.currentConditions.precip}</p>
+              <p>Wind Speed: ${data.currentConditions.windspeed}</p>
+            `;
+            document.getElementById('api-response').innerHTML = apiResponse;
+          } else {
+            
+            document.getElementById('api-response').innerHTML = '<p>No result found</p>';
+          }
+        });
+    });
+
+
+      // fetch("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/India?unitGroup=us&key=E4BYZ8N7YHNCGHPDNYGPC4FMG&contentType=json").then(response => response.json()).then(data => console.log(data.latitude, data.longitude,data.address,data.currentConditions.temp,data.currentConditions.precip,data.currentConditions.windspeed,data));
+
+  </script>
+  
+</body>
+</html>
